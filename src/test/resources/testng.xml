@@ -2,7 +2,7 @@
 <suite name = "Restassured">
     <test name = "Sample Test">
         <classes>
-            <class name = "com.restassuredexample.test" />
+            <class name = "com.restassuredexample.dummytests.test" />
         </classes>
     </test>
 </suite>
