@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 
-public class propertyLoader {
+public class PropertyLoader {
     public static String url;
     static {
         Properties prop = new Properties();
