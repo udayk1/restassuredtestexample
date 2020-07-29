@@ -6,12 +6,13 @@ import com.restassuredexample.pojo.EmpPersonalData;
 import com.restassuredexample.pojo.EmpProfessionalData;
 import com.restassuredexample.util.*;
 import static io.restassured.RestAssured.*;
-
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.*;
 import org.testng.Assert;
-
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Employeetest {
     String baseUrl;
@@ -25,7 +26,7 @@ public class Employeetest {
     public void getEmployees(){
          response = given().
                 when().
-                get("https://reqres.in/api/users/2").then().contentType(ContentType.JSON).extract().response();
+                get(baseUrl+ "/users/2").then().contentType(ContentType.JSON).extract().response();
 
          String s = response.asString();
          Gson gson = new Gson();
@@ -34,8 +35,7 @@ public class Employeetest {
          EmpProfessionalData empProfessionalData = empData.getEmpProfessionalData();
         Assert.assertEquals(empData.getEmpPersonalData().getClass().getSimpleName(),"EmpPersonalData");
         Assert.assertEquals(empData.getEmpProfessionalData().getClass().getSimpleName(),"EmpProfessionalData");
-        //Assert.assertEquals(response.body(matches));
-
+        assertThat(response.getBody().asString(),matchesJsonSchemaInClasspath("empdataschema.json"));
     }
 
 }
