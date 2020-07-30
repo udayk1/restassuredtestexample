@@ -4,15 +4,16 @@ import com.google.gson.Gson;
 import com.restassuredexample.pojo.EmpData;
 import com.restassuredexample.pojo.EmpPersonalData;
 import com.restassuredexample.pojo.EmpProfessionalData;
-import com.restassuredexample.util.*;
-import static io.restassured.RestAssured.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema;
+import com.restassuredexample.util.PropertyLoader;
+import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.testng.annotations.*;
-import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class Employeetest {
     String baseUrl;
@@ -28,16 +29,18 @@ public class Employeetest {
                 when().
                 get(baseUrl+ "/users/2").then().contentType(ContentType.JSON).extract().response();
 
-         String s = response.asString();
          Gson gson = new Gson();
-         EmpData empData = gson.fromJson(s,EmpData.class);
+         EmpData empData = gson.fromJson(response.asString(),EmpData.class);
          EmpPersonalData empPersonalData = empData.getEmpPersonalData();
          EmpProfessionalData empProfessionalData = empData.getEmpProfessionalData();
-        Assert.assertEquals(empData.getEmpPersonalData().getClass().getSimpleName(),"EmpPersonalData");
-        Assert.assertEquals(empData.getEmpProfessionalData().getClass().getSimpleName(),"EmpProfessionalData");
+         assertThat(response.getStatusCode(),equalTo(200));
+        assertThat(empData.getEmpPersonalData().getClass().getSimpleName(),equalTo("EmpPersonalData"));
+        assertThat(empData.getEmpProfessionalData().getClass().getSimpleName(),equalTo("EmpProfessionalData"));
         assertThat(response.getBody().asString(),matchesJsonSchemaInClasspath("empdataschema.json"));
     }
 
+
 }
+
 
 

@@ -3,6 +3,7 @@
     <test name = "Sample Test">
         <classes>
             <class name = "com.restassuredexample.dummytests.Employeetest" />
+            <class name = "com.restassuredexample.dummytests.Usertest" />
         </classes>
     </test>
 </suite>
