@@ -1,12 +1,12 @@
 package com.restassuredexample.pojo;
 
 public class EmpData {
-    EmpPersonalData data;
-    EmpProfessionalData ad;
+
+    private EmpPersonalData data;
+    private EmpProfessionalData ad;
 
 
     // Getter Methods
-
     public EmpPersonalData getEmpPersonalData() {
         return data;
     }

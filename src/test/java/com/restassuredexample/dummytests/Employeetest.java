@@ -12,24 +12,27 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class Employeetest {
-    String baseUrl;
-    Response response;
+    private String baseUrl;
+    private Response response;
+    private Gson gson;
     @BeforeClass
     public void setUp(){
            baseUrl = PropertyLoader.getUrl();
+           gson = new Gson();
     }
 
     @Test
-    public void getEmployees(){
+    public void getEmployee(){
          response = given().
                 when().
                 get(baseUrl+ "/users/2").then().contentType(ContentType.JSON).extract().response();
 
-         Gson gson = new Gson();
          EmpData empData = gson.fromJson(response.asString(),EmpData.class);
          EmpPersonalData empPersonalData = empData.getEmpPersonalData();
          EmpProfessionalData empProfessionalData = empData.getEmpProfessionalData();
@@ -38,6 +41,15 @@ public class Employeetest {
         assertThat(empData.getEmpProfessionalData().getClass().getSimpleName(),equalTo("EmpProfessionalData"));
         assertThat(response.getBody().asString(),matchesJsonSchemaInClasspath("empdataschema.json"));
     }
+
+    @Test
+    public void getEmployees(){
+        response = given().
+                   when().get(baseUrl+"/users?page=2").then().contentType(ContentType.JSON).extract().response();
+        assertThat(response.getStatusCode(),equalTo(200));
+
+    }
+
 
 
 }
